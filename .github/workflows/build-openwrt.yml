@@ -33,7 +33,7 @@ env:
   UPLOAD_COWTRANSFER: true
   UPLOAD_WETRANSFER: true
   UPLOAD_RELEASE: true
-  IMAGE_VERSION: Legacy
+  IMAGE_VERSION: Lienol
   TZ: Asia/Shanghai
 
 jobs:
