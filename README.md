@@ -21,7 +21,7 @@ OpenWRT Source from [Lienol/OpenWrt](https://github.com/Lienol/openwrt/tree/19.0
 - [csexton/debugger-action](https://github.com/csexton/debugger-action)
 - [Cisco](https://www.cisco.com/)
 - [OpenWrt](https://github.com/openwrt/openwrt)
-- [Lean's OpenWrt](https://github.com/coolsnowwolf/lede)
+- [Lienol/OpenWrt](https://github.com/Lienol/openwrt/tree/19.07)
 - [Cowtransfer](https://cowtransfer.com)
 - [WeTransfer](https://wetransfer.com/)
 - [Mikubill/transfer](https://github.com/Mikubill/transfer)
