@@ -18,6 +18,7 @@ on:
         description: 'SSH connection to Actions'
         required: false
         default: 'false'
+        type: boolean
   schedule:
     - cron: 0 8 * * 2
 
