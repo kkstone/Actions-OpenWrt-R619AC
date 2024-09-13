@@ -23,7 +23,7 @@ on:
     - cron: 0 8 * * 2
 
 env:
-  REPO_URL: https://github.com/coolsnowwolf/lede
+  REPO_URL: https://github.com/immortalwrt/immortalwrt
   REPO_BRANCH: master
   FEEDS_CONF: feeds.conf.default
   CONFIG_FILE: .config
@@ -80,14 +80,6 @@ jobs:
    
     - name: Update feeds
       run: cd openwrt && ./scripts/feeds update -a
-
-    - name: Fix golang version
-      run: |
-        cd openwrt
-        rm -rf feeds/luci/applications/luci-app-mosdns
-        rm -rf feeds/packages/net/{alist,adguardhome,xray*,v2ray*,v2ray*,sing*}
-        rm -rf feeds/packages/lang/golang
-        git clone https://github.com/kenzok8/golang feeds/packages/lang/golang
 
     - name: Install feeds
       run: cd openwrt && ./scripts/feeds install -a
