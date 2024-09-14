@@ -24,7 +24,7 @@ on:
 
 env:
   REPO_URL: https://github.com/immortalwrt/immortalwrt
-  REPO_BRANCH: master
+  REPO_BRANCH: openwrt-21.02
   FEEDS_CONF: feeds.conf.default
   CONFIG_FILE: .config
   DIY_P1_SH: diy-part1.sh
@@ -48,7 +48,27 @@ jobs:
       env:
         DEBIAN_FRONTEND: noninteractive
       run: |
-        sudo rm -rf /etc/apt/sources.list.d/* /usr/share/dotnet /usr/local/lib/android /opt/ghc
+        dpkg-query -Wf '${Installed-Size}\t${Package}\n' | sort -n | tail -n 100
+        df -h
+        echo "Removing large packages"
+        sudo apt-get remove -y '^dotnet-.*'
+        sudo apt-get remove -y '^llvm-.*'
+        sudo apt-get remove -y 'php.*'
+        sudo apt-get remove -y '^mongodb-.*'
+        sudo apt-get remove -y '^mysql-.*'
+        sudo apt-get remove -y azure-cli google-cloud-sdk hhvm google-chrome-stable firefox powershell mono-devel libgl1-mesa-dri
+        sudo apt-get autoremove -y
+        sudo apt-get clean
+        df -h
+        echo "Removing large directories"
+        sudo rm -rf /usr/share/dotnet/
+        sudo rm -rf /usr/local/graalvm/
+        sudo rm -rf /usr/local/.ghcup/
+        sudo rm -rf /usr/local/share/powershell
+        sudo rm -rf /usr/local/share/chromium
+        sudo rm -rf /usr/local/lib/android
+        sudo rm -rf /usr/local/lib/node_modules
+        df -h
         sudo -E apt-get -qq update
         sudo -E apt-get -qq install ack antlr3 asciidoc autoconf automake autopoint binutils bison build-essential \
         bzip2 ccache cmake cpio curl device-tree-compiler fastjar flex gawk gettext gcc-multilib g++-multilib \
@@ -73,7 +93,7 @@ jobs:
       uses: klever1988/cachewrtbuild@main
       with:
         ccache: 'true'
-        mixkey: 'lede1907-cortexa7-vfpv4'
+        mixkey: 'r619ac-cortexa7-vfpv4'
         prefix: ${{ github.workspace }}/openwrt
 
     - name: Load custom feeds
@@ -86,8 +106,54 @@ jobs:
     - name: Update feeds
       run: cd openwrt && ./scripts/feeds update -a
 
+    - name: Fix golang version
+      run: |
+        cd openwrt
+        rm -rf feeds/packages/net/{xray-core,v2ray-core,v2ray-geodata,sing-box,frp}
+        rm -rf feeds/luci/luci-app-frp*
+        rm -rf feeds/packages/lang/golang
+        git clone https://github.com/sbwml/packages_lang_golang -b 22.x feeds/packages/lang/golang
+
     - name: Install feeds
       run: cd openwrt && ./scripts/feeds install -a
+    
+    - name: Upgrade some network software version
+      run: |
+        cd openwrt
+        rm -rf feeds/packages/net/zerotier
+        wget -r --no-parent https://cdn.jsdelivr.net/gh/immortalwrt/packages@master/net/zerotier/
+        cp -rf cdn.jsdelivr.net/gh/immortalwrt/packages@master/net/zerotier feeds/packages/net/zerotier/
+        rm -rf cdn.jsdelivr.net
+        find feeds/packages/net/zerotier -name index.html -exec rm {} \;
+
+        rm -rf feeds/packages/net/tcping/Makefile
+        wget -O Makefile-tcping https://cdn.jsdelivr.net/gh/immortalwrt/packages@master/net/tcping/Makefile
+        cp -rf Makefile-tcping feeds/packages/net/tcping/Makefile
+        rm -rf Makefile-tcping
+
+        rm -rf feeds/packages/net/natmap
+        wget -r --no-parent https://cdn.jsdelivr.net/gh/immortalwrt/packages@master/net/natmap/
+        cp -rf cdn.jsdelivr.net/gh/immortalwrt/packages@master/net/natmap feeds/packages/net/natmap/
+        rm -rf cdn.jsdelivr.net
+        find feeds/packages/net/natmap -name index.html -exec rm {} \;
+
+        rm -rf feeds/packages/net/smartdns
+        wget -r --no-parent https://cdn.jsdelivr.net/gh/immortalwrt/packages@master/net/smartdns/
+        cp -rf cdn.jsdelivr.net/gh/immortalwrt/packages@master/net/smartdns feeds/packages/net/smartdns/
+        rm -rf cdn.jsdelivr.net
+        find feeds/packages/net/smartdns -name index.html -exec rm {} \;
+
+        rm -rf feeds/packages/net/ddns-go
+        wget -r --no-parent https://cdn.jsdelivr.net/gh/immortalwrt/packages@master/net/ddns-go/
+        cp -rf cdn.jsdelivr.net/gh/immortalwrt/packages@master/net/ddns-go feeds/packages/net/ddns-go/
+        rm -rf cdn.jsdelivr.net
+        find feeds/packages/net/ddns-go -name index.html -exec rm {} \;    
+
+        rm -rf feeds/packages/net/frp
+        wget -r --no-parent https://cdn.jsdelivr.net/gh/immortalwrt/packages@master/net/frp/
+        cp -rf cdn.jsdelivr.net/gh/immortalwrt/packages@master/net/frp feeds/packages/net/frp/
+        rm -rf cdn.jsdelivr.net
+        find feeds/packages/net/frp -name index.html -exec rm {} \; 
 
     - name: Load custom configuration
       run: |
