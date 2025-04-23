@@ -111,7 +111,7 @@ jobs:
         cd openwrt
         rm -rf feeds/packages/net/{xray-core,v2ray-core,v2ray-geodata,sing-box}
         rm -rf feeds/packages/lang/golang
-        git clone https://github.com/sbwml/packages_lang_golang -b 22.x feeds/packages/lang/golang
+        git clone https://github.com/sbwml/packages_lang_golang -b 24.x feeds/packages/lang/golang
 
     - name: Install feeds
       run: cd openwrt && ./scripts/feeds install -a
@@ -119,11 +119,6 @@ jobs:
     - name: Upgrade some network software version
       run: |
         cd openwrt
-        rm -rf feeds/packages/net/zerotier
-        wget -r --no-parent https://cdn.jsdelivr.net/gh/immortalwrt/packages@master/net/zerotier/
-        cp -rf cdn.jsdelivr.net/gh/immortalwrt/packages@master/net/zerotier feeds/packages/net/zerotier/
-        rm -rf cdn.jsdelivr.net
-        find feeds/packages/net/zerotier -name index.html -exec rm {} \;
 
         rm -rf feeds/packages/net/tcping/Makefile
         wget -O Makefile-tcping https://cdn.jsdelivr.net/gh/immortalwrt/packages@master/net/tcping/Makefile
