@@ -18,4 +18,4 @@ git clone https://github.com/xiaorouji/openwrt-passwall-packages.git
 git clone https://github.com/xiaoxiao29/luci-app-adguardhome.git
 git clone https://github.com/jerrykuku/lua-maxminddb.git
 
-wget https://github.com/kkstone/Actions-RAX3000M-NAND-EMMC/raw/emmc/luci-packages/luci-app-wolplus.zip && unzip luci-app-wolplus.zip && rm -rf luci-app-wolplus.zip
+wget https://github.com/kkstone/Actions-RAX3000M-NAND-EMMC/raw/21.02/luci-packages/luci-app-wolplus.zip && unzip luci-app-wolplus.zip && rm -rf luci-app-wolplus.zip
