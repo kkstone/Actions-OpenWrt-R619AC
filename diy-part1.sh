@@ -13,8 +13,8 @@
 # sed -i 's/^#\(.*helloworld\)/\1/' feeds.conf.default
 
 cd package
-git clone https://github.com/xiaorouji/openwrt-passwall.git
-git clone https://github.com/xiaorouji/openwrt-passwall-packages.git
+git clone https://github.com/Openwrt-Passwall/openwrt-passwall.git
+git clone https://github.com/Openwrt-Passwall/openwrt-passwall-packages.git
 git clone https://github.com/xiaoxiao29/luci-app-adguardhome.git
 git clone https://github.com/jerrykuku/lua-maxminddb.git
 
